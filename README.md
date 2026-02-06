@@ -1,130 +1,165 @@
 # 📝 Task Manager API
 
-A production-ready RESTful Task Manager API built with Node.js & Express, featuring authentication, task management, security best practices, structured logging, and clean architecture.
+
+## Description  
+A production-ready **RESTful** Task Manager **API** built with **Node.js** & **Express**, featuring authentication, task management, **security** best practices, structured **logging**, and clean architecture.
 
 This project is designed to showcase real-world backend development practices and is suitable for learning, interviews, and production use.
 
 ## 🚀 Features
 
-🔐 User Authentication (JWT based)
+* 🔐 User Authentication (JWT based)
 
-🔑 Forgot & Reset password Via Email
+* 🔑 Forgot & Reset password Via Email
 
-👤 User Registration & Login
+* 👤 User Registration & Login
 
-🗂️ Task CRUD (Create, Read, Update, Delete)
+* 🗂️ Task CRUD (Create, Read, Update, Delete)
 
-✅ Task status management
+* ✅ Task status management
 
-🔒 Protected routes with middleware
+* 🔒 Protected routes with middleware
 
-🧾 Centralized error handling
+* 🧾 Centralized error handling
 
-📊 Winston logger (console + rotating files)
+* 📊 Winston logger (console + rotating files)
 
-🚦 Rate limiting & security middleware
+* 🚦 Rate limiting & security middleware
 
-🧹 Input validation (Yup)
+* 🧹 Input validation (Yup)
 
-🌍 Environment-based configuration
+* 🌍 Environment-based configuration
 
-✨ ESLint + Prettier for clean code
+* ✨ ESLint + Prettier for clean code
+
 
 ## 🧰 Tech Stack
 
-Node.js (ES6 Modules)
+* Node.js (ES6 Modules)
 
-Express.js
+* Express.js
 
-MongoDB + Mongoose
+* MongoDB + Mongoose
 
-JWT (jsonwebtoken) – Authentication
+* JWT (jsonwebtoken) – Authentication
 
-Winston – Logging
+* Winston – Logging
 
-Yup – Validation
+* Yup – Validation
 
-dotenv – Environment variables
+* dotenv – Environment variables
 
-ESLint & Prettier – Code quality
+* ESLint & Prettier – Code quality
 
-Nodemailer – Sending Email
+* Nodemailer – Sending Email
 
-Bcryptjs – Password hashing
+* Bcryptjs – Password hashing
+
 
 ## ⚙️ Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env file
+ To run this project, you will need to add the following environment variables to your .env file
+
+`DBURL`  
+`GOOGLE_APP_PASSWORD`  
+`SENDER_EMAIL`
 
 Create a .env file using .env.example:
 
-`DBURL`
-`PORT`
-`NODE_ENV`
-`GOOGLE_APP_PASSWORD`
-`SENDER_EMAIL`
+
+## 📂 Folder Structure
+
+
+```text
+.
+|-- task-manager
+|-- |-- src
+|-- |   |-- config
+|-- |   |   |-- db.config.js
+|-- |   |   |-- env.config.js
+|-- |   |   |-- logger.config.js
+|-- |   |   |__ ratelimit.config.js
+|-- |   |-- controllers
+|-- |   |   |-- auth.controller.js
+|-- |   |   |-- task.controller.js
+|-- |   |   |__ user.controller.js
+|-- |   |-- middlewares
+|-- |   |   |-- error.middleware.js
+|-- |   |   |-- protectroute.middleware.js
+|-- |   |   |-- requestlogger.middleware.js
+|-- |   |   |-- security.middleware.js
+|-- |   |   |__ validation.middleware.js
+|-- |   |-- models
+|-- |   |   |-- user.model.js
+|-- |   |   |-- task.model.js
+|-- |   |   |__ blacklist.model.js
+|-- |   |-- routes
+|-- |   |   |-- user.routes.js
+|-- |   |   |-- auth.routes.js
+|-- |   |   |__ task.routes.js
+|-- |   |-- services
+|-- |   |   |-- auth.service.js
+|-- |   |   |-- user.service.js
+|-- |   |   |__ task.service.js
+|-- |   |-- utils
+|-- |   |   |-- ApiResponse.js
+|-- |   |   |-- AppError.js
+|-- |   |   |-- asyncHandler.js
+|-- |   |   |-- blacklistToken.js
+|-- |   |   |-- cryptoHash.js
+|-- |   |   |-- filterQuery.js
+|-- |   |   |-- jsonwebtoken.js
+|-- |   |   |__ sendMail.js
+|-- |   |-- validation
+|-- |   |   |__ yup.schemas.js
+|-- |-- index.js
+|-- |-- .env
+|-- |-- .gitignore
+|-- |-- .prettierignore
+|-- |-- .prettierrc
+|-- |-- eslint.config.mjs
+|-- |-- LICENSE
+|-- |-- package-lock.json
+|-- |-- package.json
+|__ |__ README.md
+```
+
 
 ## 📌 API Endpoints
 
 #### 🔑 Auth Routes
 
-```http
-  POST /api/v1/auth/signup
-```
+| METHOD | ENDPOINT | PROTECTED | DESCRIPTION |
+|----|----|----|----|
+| POST | /api/v1/auth/signup | No | Signup |
+| POST | /api/v1/auth/login | No | Login |
+| POST | /api/v1/auth/logout | Yes | Logout |
+| POST | /api/v1/auth/renew-token | Yes  | Generate New Access Token |
+| POST | /api/v1/auth/forgot-password | No | Get Reset Password Link Via Email |
+| POST | /api/v1/auth/reset-password?token=resettoken&id=userid | No | Reset Password |
 
-```http
-  POST /api/v1/auth/login
-```
-
-```http
-  POST /api/v1/auth/logout
-```
-
-```http
-  POST /api/v1/auth/renew-token
-```
-
-```http
-  POST /api/v1/auth/forgot-password
-```
-
-```http
-  POST /api/v1/auth/reset-password
-```
 
 #### 🗂️ Task Routes (Protected)
 
-```http
-  POST /api/v1/tasks
-```
+| METHOD | ENDPOINT | PROTECTED | DESCRIPTION |
+|----|----|----|----|
+| POST | /api/v1/tasks | Yes | Create A Task |
+| GET | /api/v1/tasks?page=1&limit=10&search=javascript&sort=oldest&status=success | Yes | Get Tasks |
+| PATCH | /api/v1/tasks/${id} | Yes | Update A Task |
+| DELETE | /api/v1/tasks/${id} | Yes | Delete A Task |
 
-```http
-  GET /api/v1/tasks
-```
 
-```http
-  PATCH /api/v1/tasks/${id}
-```
+#### 👤 User Routes (Protected)
 
-```http
-  DELETE /api/v1/tasks/${id}
-```
+| METHOD | ENDPOINT | PROTECTED | DESCRIPTION |
+|----|----|----|----|
+| GET | /api/v1/user | Yes | Get User |
+| PATCH | /api/v1/user | Yes | Update User |
+| PATCH | /api/v1/user/change-password | Yes | Change Password |
 
-#### 👤 User Routes
 
-```http
-  GET /api/v1/user
-```
+#### 🔐Protected Routes Requires **JWT** Access token in Authorization: Bearer \<token>
 
-```http
-  PATCH /api/v1/user
-```
-
-```http
-  PATCH /api/v1/user/change-password
-```
-
-#### 🔐 Requires JWT token in Authorization: Bearer <token>
 
 ## 🧾 Logging (Winston)
 
@@ -146,7 +181,8 @@ Prettier
 
 Ensures consistent formatting
 
-## ▶️ Run Locally
+
+## ▶️ Installation 
 
 Clone the project
 
@@ -178,6 +214,8 @@ Start the server (development)
   npm run dev
 ```
 
+
+
 ## 🧠 Design Philosophy
 
 Separation of concerns
@@ -196,7 +234,7 @@ Code is not just written to work — it is written to be understood.
 
 [ ] Swagger / OpenAPI docs
 
-[ ] images
+[ ] Accept images
 
 [ ] Unit & integration tests
 
@@ -204,8 +242,15 @@ Code is not just written to work — it is written to be understood.
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
-## Ram Soni
+## Author Ram soni
 
 ⭐ If you find this project useful, consider giving it a star on GitHub!
 
 Happy coding 🚀
+
+
+## Contact
+
+if any issue in this project then contact me i will help you
+
+**Email:** ramsoni888990@gmail.com
